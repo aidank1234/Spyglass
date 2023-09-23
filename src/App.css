@@ -56,6 +56,12 @@ select,
   background-color: #e2e0d8;
 }
 
+.promptInput {
+  vertical-align: top;
+  resize: none;  /* To prevent user from resizing the textarea */
+  overflow-y: auto;  /* To allow scrolling when text overflows */
+}
+
 select {
   height: 8vh; 
 }
@@ -81,4 +87,13 @@ select {
 
 .runButton:hover {
   background-color: #555;
+}
+
+.apiKeyInput {
+  width: 100%;
+  border-radius: 5px;
+  padding: 0.5vh 1vw;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  background-color: #e2e0d8;
 }

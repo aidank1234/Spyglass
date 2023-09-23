@@ -1,19 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
+  const [selectedValue, setSelectedValue] = useState("AI");
+
+  const handleSelectChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
+
   return (
     <div className="mainContainer">
       <div className='horizontalPart'>
-        <textarea placeholder="Enter your code here..." className="codeEntry"></textarea>
+        <textarea className='codeEntry' placeholder='Enter code here...'></textarea>
       </div>
-      <div className='horizontalPart'>
-        <select defaultValue="AI">
+
+      <div className='horizontalPart verticallyCentered'>
+        <select value={selectedValue} onChange={handleSelectChange}>
           <option value="AI">AI</option>
         </select>
-        <textarea placeholder="Prompt" className="promptInput"></textarea>
+
+        {selectedValue === "AI" && (
+          <input type="text" className="apiKeyInput" placeholder="API key" />
+        )}
+
+        <textarea className="promptInput" placeholder="Prompt"></textarea>
         <button className="runButton">Run</button>
-        <textarea placeholder="Output" className="outputBox"></textarea>
+        <textarea className="outputBox" placeholder="Output"></textarea>
       </div>
     </div>
   );
