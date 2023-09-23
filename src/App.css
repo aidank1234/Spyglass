@@ -16,6 +16,7 @@ select,
 
 .mainContainer {
   width: 100vw;
+  padding-top: 90px;
   height: 100vh;
   background-color: #151515;
   display: flex;
@@ -30,7 +31,7 @@ select,
   border-radius: 10px;
   margin-top: 3vh;
   margin-bottom: 3vh;  /* Ensuring equal margin at the bottom */
-  padding: 1vw;
+  padding: 2vw;
   display: flex;  /* Added to control content within */
   flex-direction: column;  /* Set direction for the children */
   align-items: center;  /* Center content horizontally */
@@ -90,17 +91,10 @@ select {
   width: 100%;
   height: 5vh;
   border-radius: 5px;
-  background-color: #333;
+  background-color: #2b374d;
   color: white;
   cursor: pointer;
   margin-top: 1vh;
-}
-
-/* ... other styles ... */
-
-
-.runButton:hover {
-  background-color: #555;
 }
 
 .apiKeyInput {
@@ -121,4 +115,12 @@ select {
 .roundedEditor .ace_content, 
 .roundedEditor .ace_scroller {
   border-radius: 10px;
+}
+
+.logo {
+  width: 100px; /* Adjust the width to make it square */
+  height: 100px; /* Same height as the width to make it square */
+  position: absolute; /* Position absolutely within the parent */
+  top: 0; /* Place at the top */
+  left: 20px; /* Place at the left */
 }

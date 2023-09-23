@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AceEditor from 'react-ace';
 import { explainCode } from './OpenAI.helper';
+import logo from './spyLogo.png'; // Import your logo image
 // Import necessary modes and themes for Ace Editor
 import './App.css';
 import 'ace-builds/src-noconflict/mode-javascript';
@@ -36,6 +37,9 @@ function App() {
 
   return (
     <div className="mainContainer">
+       {/* Logo in the top-left corner */}
+       <img src={logo} alt="Logo" className="logo" />
+
       <div className='horizontalPart'>
         <AceEditor
           mode="javascript"
@@ -62,18 +66,18 @@ function App() {
         />
       </div>
       <div className="horizontalPart">
-        <select
+        {/* <select
           value={selectedOption}
           onChange={(e) => setSelectedOption(e.target.value)}
         >
           <option value="AI">AI</option>
-        </select>
+        </select> */}
 
         {selectedOption === 'AI' && (
           <>
             <input
               type="text"
-              placeholder="API Key"
+              placeholder="OpenAI API Key"
               className="promptInput"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
@@ -87,7 +91,7 @@ function App() {
             />
             <textarea
               type="text"
-              placeholder="Detector"
+              placeholder="Detector (yes or no question)"
               className="promptInput"
               id="prompt"
               value={promptText}
