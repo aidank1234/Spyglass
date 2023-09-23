@@ -44,6 +44,11 @@ export async function explainCode(codeToExplain, detector, apiKey, callback) {
 
 export async function explainCodeNoStream(codeToExplain, detector) {
     try {
+        const openai = new OpenAI({
+            apiKey: apiKey,
+            dangerouslyAllowBrowser: true,
+        });
+    
         const noStream = await openai.chat.completions.create({
             frequency_penalty: 0,
             messages: [
