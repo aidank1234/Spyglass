@@ -6,6 +6,7 @@ import logo from './spyLogo.png'; // Import your logo image
 import './App.css';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-monokai';
+import {matchRegex} from "./regex.helper";
 
 function App() {
   const [codeEntry, setCodeEntry] = useState('Paste your smart contract here'); // State for AceEditor content
@@ -19,11 +20,16 @@ function App() {
 
   const handleRun = () => {
     setOutputText("");
-    explainCode(codeEntry, promptText, apiKey, (newWord) => {
-      if (!!newWord) {
-        setOutputText((prevOutputText) => prevOutputText + newWord);
-      }
-    });
+    if (selectedOption === "AI")
+      explainCode(codeEntry, promptText, apiKey, (newWord) => {
+        if (!!newWord) {
+          setOutputText((prevOutputText) => prevOutputText + newWord);
+        }
+      });
+    else if (selectedOption === "regex")
+      matchRegex(codeEntry, promptText).then(res => {
+        setOutputText((prevOutputText) => prevOutputText + res);
+      });
   };
 
   useEffect(() => {
