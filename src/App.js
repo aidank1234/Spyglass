@@ -18,7 +18,7 @@ function App() {
 
   const handleRun = () => {
     setOutputText("");
-    explainCode(codeEntry, promptText, (newWord) => {
+    explainCode(codeEntry, promptText, apiKey, (newWord) => {
       if (!!newWord) {
         setOutputText((prevOutputText) => prevOutputText + newWord);
       }
@@ -109,7 +109,7 @@ function App() {
         {selectedOption === 'AI' && (
           <>
             <input
-              type="text"
+              type="password"
               placeholder="OpenAI API Key"
               className="promptInput"
               value={apiKey}

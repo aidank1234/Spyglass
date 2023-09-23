@@ -1,12 +1,13 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-	apiKey: process.env.REACT_APP_OPENAI_KEY,
-    dangerouslyAllowBrowser: true,
-});
 const gptModel = "gpt-4";
 
-export async function explainCode(codeToExplain, detector, callback) {
+export async function explainCode(codeToExplain, detector, apiKey, callback) {
+    const openai = new OpenAI({
+        apiKey: apiKey,
+        dangerouslyAllowBrowser: true,
+    });
+
     try {
         const stream = await openai.chat.completions.create({
             frequency_penalty: 0,
