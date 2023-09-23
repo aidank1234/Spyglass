@@ -15,6 +15,7 @@ function App() {
   const [promptText, setPromptText] = useState(''); // State for Prompt text input
   const [outputText, setOutputText] = useState(''); // State for Output textarea
   const [list, setList] = useState([]); // State for list of JSON name-prompt entries
+  const [detectors, setDetectors] = useState([]); // State for detectors which can be saved to JSON
 
   const handleRun = () => {
     setOutputText("");
@@ -35,14 +36,13 @@ function App() {
   }
 
   const handleFileDownload = () => {
-    const jsonData = JSON.stringify({ [detectorName]: promptText });
-    const blob = new Blob([jsonData], { type: 'application/json' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'inputData.json';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(detectors.reduce((acc, curr) => ({ ...acc, [curr.name]: curr.prompt }), {})));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "detectors.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
   };
 
   const handleFileUpload = (e) => {
@@ -72,6 +72,14 @@ function App() {
     if (selectedEntry) {
       setDetectorName(selectedEntry.name);
       setPromptText(selectedEntry.prompt);
+    }
+  };
+
+  const handleAddDetector = () => {
+    if (detectorName.trim() && promptText.trim()) {
+      setDetectors([...detectors, { name: detectorName, prompt: promptText }]);
+      setDetectorName(''); // clear the input fields after adding
+      setPromptText('');
     }
   };
 
@@ -124,6 +132,7 @@ function App() {
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
             />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: "100%" }}>
             {list.length > 1 ? (
                <select onChange={handleDetectorChange} value={detectorName} className="promptInput">
                {list.map((entry, index) => <option key={index} value={entry.name}>{entry.name}</option>)}
@@ -137,6 +146,8 @@ function App() {
               onChange={(e) => setDetectorName(e.target.value)}
             />
             )}
+            <button onClick={handleAddDetector} style={{height: "30px", width: 40, marginBottom: 8}}>+</button>
+            </div>
            
             <textarea
               type="text"
@@ -152,7 +163,7 @@ function App() {
         {list.length > 1 &&
           <button className="runButton" disabled={codeEntry === 'Paste your smart contract here'} onClick={handleRunAll}>Run All Detectors</button>
         }
-        <button className="runButton" disabled={!apiKey || !promptText || !detectorName || codeEntry === 'Paste your smart contract here'} onClick={handleFileDownload}>Download Detector</button>
+        <button className="runButton" onClick={handleFileDownload}>Download Detectors</button>
         <label className="fileUploadWrapper">Upload Detectors<input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} /></label>
 
         <textarea
