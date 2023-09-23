@@ -2,6 +2,10 @@ body, button, textarea, input {
   font-family: 'Roboto'  /* Replace 'Roboto' with your font name */
 }
 
+.promptInput {
+  height: 40px;
+}
+
 select,
 .promptInput,
 .outputBox,
@@ -109,6 +113,16 @@ select {
 }
 
 .runButton:disabled {
+  background-color: #808080;
+  cursor: not-allowed;
+}
+
+.newButton {
+  background-color: #2b374d;
+  color: #fff;
+}
+
+.newButton:disabled {
   background-color: #808080;
   cursor: not-allowed;
 }

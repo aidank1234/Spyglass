@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AceEditor from 'react-ace';
 import { explainCode, explainCodeNoStream } from './OpenAI.helper';
 import logo from './spyLogo.png'; // Import your logo image
@@ -15,7 +15,7 @@ function App() {
   const [promptText, setPromptText] = useState(''); // State for Prompt text input
   const [outputText, setOutputText] = useState(''); // State for Output textarea
   const [list, setList] = useState([]); // State for list of JSON name-prompt entries
-  const [detectors, setDetectors] = useState([]); // State for detectors which can be saved to JSON
+  const [viewMode, setViewMode] = useState(false);
 
   const handleRun = () => {
     setOutputText("");
@@ -25,6 +25,13 @@ function App() {
       }
     });
   };
+
+  useEffect(() => {
+    if (list.length) {
+      setPromptText(list[0].prompt);
+    }
+  }, [list]);
+
 
   const handleRunAll = async () => {
     setOutputText("");
@@ -36,7 +43,7 @@ function App() {
   }
 
   const handleFileDownload = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(detectors.reduce((acc, curr) => ({ ...acc, [curr.name]: curr.prompt }), {})));
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(list.reduce((acc, curr) => ({ ...acc, [curr.name]: curr.prompt }), {})));
     const downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute("href", dataStr);
     downloadAnchorNode.setAttribute("download", "detectors.json");
@@ -76,10 +83,15 @@ function App() {
   };
 
   const handleAddDetector = () => {
-    if (detectorName.trim() && promptText.trim()) {
-      setDetectors([...detectors, { name: detectorName, prompt: promptText }]);
-      setDetectorName(''); // clear the input fields after adding
+    if (!viewMode) {
+      if (detectorName.trim() && promptText.trim()) {
+        setList([...list, { name: detectorName, prompt: promptText }]);
+        setDetectorName(''); // clear the input fields after adding
+        setViewMode(true);
+      }
+    } else {
       setPromptText('');
+      setViewMode(false);
     }
   };
 
@@ -133,7 +145,7 @@ function App() {
               onChange={(e) => setApiKey(e.target.value)}
             />
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: "100%" }}>
-            {list.length > 1 ? (
+            {viewMode ? (
                <select onChange={handleDetectorChange} value={detectorName} className="promptInput">
                {list.map((entry, index) => <option key={index} value={entry.name}>{entry.name}</option>)}
              </select>
@@ -146,7 +158,7 @@ function App() {
               onChange={(e) => setDetectorName(e.target.value)}
             />
             )}
-            <button onClick={handleAddDetector} style={{height: "30px", width: 40, marginBottom: 8}}>+</button>
+            <button className='newButton' disabled={!viewMode && (!detectorName || !promptText)} onClick={handleAddDetector} style={{height: "40px", width: 60, marginBottom: 8, borderRadius: '5px', border: 'none'}}>{viewMode ? 'New' : 'Save'}</button>
             </div>
            
             <textarea
@@ -155,6 +167,7 @@ function App() {
               className="promptInput"
               id="prompt"
               value={promptText}
+              disabled={viewMode}
               onChange={(e) => setPromptText(e.target.value)}
             />
           </>
