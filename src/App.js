@@ -85,7 +85,7 @@ function App() {
               value={detectorName}
               onChange={(e) => setDetectorName(e.target.value)}
             />
-            <input
+            <textarea
               type="text"
               placeholder="Detector"
               className="promptInput"
