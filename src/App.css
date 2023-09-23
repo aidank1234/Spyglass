@@ -1,7 +1,13 @@
+/* ... other styles ... */
+
+* {
+  box-sizing: border-box; /* This ensures padding doesn't add extra width/height */
+}
+
 .mainContainer {
   width: 100vw;
   height: 100vh;
-  background-color: aqua;
+  background-color: #151515;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -10,15 +16,69 @@
 
 .horizontalPart {
   width: 48vw;
-  height: 93vh;
-  background-color: blueviolet;
+  background-color: #2a2a2a;
   border-radius: 10px;
   margin-top: 3vh;
+  margin-bottom: 3vh;  /* Ensuring equal margin at the bottom */
+  padding: 1vw;
+  display: flex;  /* Added to control content within */
+  flex-direction: column;  /* Set direction for the children */
+  align-items: center;  /* Center content horizontally */
+  justify-content: center;  /* Center content vertically */
+}
+
+.codeEntry {
+  width: 96%;
+  height: 90%;
+  border-radius: 10px;
+  padding: 1vw;
+  margin: auto;
+  background-color: #e2e0d8;
 }
 
 .verticallyCentered {
-  height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center; 
+  height: 90%;
+  width: 96%;
+  padding: 2%;
+}
+
+select,
+.promptInput,
+.outputBox {
+  width: 100%; 
+  border-radius: 5px;
+  padding: 0.5vh 1vw;
+  margin-bottom: 1vh;
+  background-color: #e2e0d8;
+}
+
+select {
+  height: 8vh; 
+}
+
+.promptInput,
+.outputBox {
+  flex-grow: 1;
+  margin-top: 1vh;
+}
+
+.runButton {
+  width: 100%;
+  height: 5vh;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+  margin-top: 1vh;
+}
+
+/* ... other styles ... */
+
+
+.runButton:hover {
+  background-color: #555;
 }
