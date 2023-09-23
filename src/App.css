@@ -97,3 +97,14 @@ select {
   margin-bottom: 1vh;
   background-color: #e2e0d8;
 }
+
+.roundedEditor {
+  border-radius: 10px;
+  overflow: hidden; /* Important, to clip the inner content by the border radius */
+}
+
+/* If there are nested elements within the editor that also need the radius, target them here */
+.roundedEditor .ace_content, 
+.roundedEditor .ace_scroller {
+  border-radius: 10px;
+}

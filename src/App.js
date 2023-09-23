@@ -1,61 +1,82 @@
 import React, { useState } from 'react';
+import AceEditor from 'react-ace';
+// Import necessary modes and themes for Ace Editor
 import './App.css';
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/theme-monokai';
 
 function App() {
-  const [codeEntry, setCodeEntry] = useState('');
-  const [selectedValue, setSelectedValue] = useState("AI");
-  const [apiKey, setApiKey] = useState('');
-  const [prompt, setPrompt] = useState('');
-  const [output, setOutput] = useState('');
+  const [codeEntry, setCodeEntry] = useState(''); // State for AceEditor content
+  const [selectedOption, setSelectedOption] = useState('AI'); // State for select box
+  const [apiKey, setApiKey] = useState(''); // State for API key input
+  const [promptText, setPromptText] = useState(''); // State for Prompt text input
+  const [outputText, setOutputText] = useState(''); // State for Output textarea
 
-  const handleSelectChange = (event) => {
-    setSelectedValue(event.target.value);
+  const handleRun = () => {
+    // Handle the run logic here
   };
 
   return (
     <div className="mainContainer">
       <div className='horizontalPart'>
-        <textarea 
-          className='codeEntry' 
-          placeholder='Enter code here...'
+        <AceEditor
+          mode="javascript"
+          theme="monokai"
+          name="codeEditor"
+          className="roundedEditor"
           value={codeEntry}
-          onChange={(e) => setCodeEntry(e.target.value)}
-        ></textarea>
+          onChange={setCodeEntry}
+          width="96%"
+          height="90%"
+          fontSize={14}
+          showPrintMargin={true}
+          showGutter={true}
+          highlightActiveLine={true}
+          editorProps={{ $blockScrolling: true }}
+          setOptions={{
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+            enableSnippets: true,
+            showLineNumbers: true,
+            tabSize: 2,
+            useWorker: false,
+          }}
+        />
       </div>
-
-      <div className='horizontalPart verticallyCentered'>
-        <select 
-          value={selectedValue} 
-          onChange={handleSelectChange}
+      <div className="horizontalPart">
+        <select
+          value={selectedOption}
+          onChange={(e) => setSelectedOption(e.target.value)}
         >
           <option value="AI">AI</option>
         </select>
 
-        {selectedValue === "AI" && (
-          <input 
-            type="text" 
-            className="apiKeyInput" 
-            placeholder="API key"
+        {selectedOption === 'AI' && (
+          <input
+            type="text"
+            placeholder="API Key"
+            className="promptInput"
             value={apiKey}
             onChange={(e) => setApiKey(e.target.value)}
           />
         )}
 
-        <textarea
-          className="promptInput"
+        <input
+          type="text"
           placeholder="Prompt"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-        ></textarea>
+          className="promptInput"
+          value={promptText}
+          onChange={(e) => setPromptText(e.target.value)}
+        />
         
-        <button className="runButton">Run</button>
-        
-        <textarea 
-          className="outputBox" 
+        <button className="runButton" onClick={handleRun}>Run</button>
+
+        <textarea
+          className="outputBox"
           placeholder="Output"
-          value={output}
-          onChange={(e) => setOutput(e.target.value)}
-        ></textarea>
+          value={outputText}
+          readOnly
+        />
       </div>
     </div>
   );
