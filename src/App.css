@@ -1,4 +1,14 @@
-/* ... other styles ... */
+body, button, textarea, input {
+  font-family: 'Roboto'  /* Replace 'Roboto' with your font name */
+}
+
+select,
+.promptInput,
+.outputBox,
+.apiKeyInput {
+  font-size: 18px;
+}
+
 
 * {
   box-sizing: border-box; /* This ensures padding doesn't add extra width/height */
