@@ -23,6 +23,17 @@ function App() {
     });
   };
 
+  const handleFileDownload = () => {
+    const jsonData = JSON.stringify({ [detectorName]: promptText });
+    const blob = new Blob([jsonData], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'inputData.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="mainContainer">
       <div className='horizontalPart'>
@@ -86,6 +97,7 @@ function App() {
         )}
         
         <button className="runButton" onClick={handleRun}>Run</button>
+        <button className="runButton" onClick={handleFileDownload}>Download JSON</button>
 
         <textarea
           className="outputBox"
