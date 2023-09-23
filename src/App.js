@@ -35,6 +35,26 @@ function App() {
     document.body.removeChild(link);
   };
 
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type === 'application/json') {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const jsonData = JSON.parse(e.target.result);
+          const [key] = Object.keys(jsonData);
+          setDetectorName(key);
+          setPromptText(jsonData[key]);
+        } catch (error) {
+          alert('Invalid JSON format!');
+        }
+      };
+      reader.readAsText(file);
+    } else {
+      alert('Please upload a valid JSON file!');
+    }
+  };
+
   return (
     <div className="mainContainer">
        {/* Logo in the top-left corner */}
@@ -99,10 +119,10 @@ function App() {
             />
           </>
         )}
-        
         <button className="runButton" onClick={handleRun}>Run</button>
         <button className="runButton" onClick={handleFileDownload}>Download JSON</button>
-
+        <label className="fileUploadWrapper">Upload File<input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} /></label>
+        
         <textarea
           className="outputBox"
           placeholder="Output"

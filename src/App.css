@@ -124,3 +124,21 @@ select {
   top: 0; /* Place at the top */
   left: 20px; /* Place at the left */
 }
+
+.fileUploadWrapper {
+  width: 100%;
+  height: 5vh;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+  margin-top: 1vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.fileUploadWrapper:hover {
+  background-color: #555;
+}
