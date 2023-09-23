@@ -1,0 +1,16 @@
+{
+    "EncodePackedCollision":"Is there a potential collision due to dynamic type usages in abi.encodePacked in this contract?",
+    "IncorrectShift":"In Solidity assembly, shr(a, b) right-shifts 'b' by 'a' bits where 'b' is some constant. Is there misusage of shr in this contract where the constant is the second parameter?",
+    "Reentrancy":"Is there a reentrancy in this contract?",
+    "StateVariableShadowing":"Is there state variable shadowing in the contracts? It can only occur when there is inheritance.",
+    "ArbitraryFromInTransferFrom":"Is there a 'transferFrom' where the 'from' is not the 'msg.sender' in this contract?",
+    "ArbitrarySendETH":"Is there an unprotected call to a function sending Ether to an arbitrary address in this contract?",
+    "MsgValueInLoop":"Is there the use of 'msg.value' in a loop in this contract?",
+    "SingleStepOwnable":"If the contract is controlled by an owner, is the transfer of ownership two-step? If the contract is not ownable, respond 'No'",
+    "Overflow":"Is there potential overflow in this contract where the range of the type may be exceeded in this contract?",
+    "BlockNumberUsage":"Is `block.number` used in this contract?",
+    "TxOrigin": "Is `tx.origin` used in this contract?",
+    "IncreaseAllowance": "Is `increaseAllowance` used on a token or ERC20 contract in this contract?",
+    "UncheckedCallSuccess": "Is a `.call` made without the returned success boolean being validated in this contract?",
+    "Initialize": "Is there an `initialize` function in this contract without access control or a modifier for access control?"
+}
