@@ -29,7 +29,7 @@ function App() {
     setOutputText("");
     for (const item of list) {
       setOutputText((prevOutputText) => prevOutputText + item.name + ": ");
-      const response = await explainCodeNoStream(codeEntry, item.prompt);
+      const response = await explainCodeNoStream(codeEntry, item.prompt, apiKey);
       setOutputText((prevOutputText) => prevOutputText + response.content + "\n\n");
     }
   }

@@ -42,7 +42,7 @@ export async function explainCode(codeToExplain, detector, apiKey, callback) {
     }
 }
 
-export async function explainCodeNoStream(codeToExplain, detector) {
+export async function explainCodeNoStream(codeToExplain, detector, apiKey) {
     try {
         const openai = new OpenAI({
             apiKey: apiKey,
