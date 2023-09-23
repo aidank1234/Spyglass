@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AceEditor from 'react-ace';
-import { explainCode } from './OpenAI.helper';
+import { explainCode, explainCodeNoStream } from './OpenAI.helper';
 import logo from './spyLogo.png'; // Import your logo image
 // Import necessary modes and themes for Ace Editor
 import './App.css';
@@ -24,6 +24,15 @@ function App() {
       }
     });
   };
+
+  const handleRunAll = async () => {
+    setOutputText("");
+    for (const item of list) {
+      setOutputText((prevOutputText) => prevOutputText + item.name + ": ");
+      const response = await explainCodeNoStream(codeEntry, item.prompt);
+      setOutputText((prevOutputText) => prevOutputText + response.content + "\n\n");
+    }
+  }
 
   const handleFileDownload = () => {
     const jsonData = JSON.stringify({ [detectorName]: promptText });
@@ -140,6 +149,9 @@ function App() {
           </>
         )}
         <button className="runButton" onClick={handleRun}>Run</button>
+        {list.length > 1 &&
+          <button className="runButton" onClick={handleRunAll}>Run All Detectors</button>
+        }
         <button className="runButton" onClick={handleFileDownload}>Download Detector</button>
         <label className="fileUploadWrapper">Upload Detectors<input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} /></label>
 

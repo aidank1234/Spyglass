@@ -102,6 +102,11 @@ select {
   color: white;
   cursor: pointer;
   margin-top: 1vh;
+  border: none; /* Remove the default border */
+}
+
+.runButton:hover {
+  background-color: #34495e;
 }
 
 .apiKeyInput {
