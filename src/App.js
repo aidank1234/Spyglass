@@ -10,12 +10,16 @@ function App() {
   const [codeEntry, setCodeEntry] = useState(''); // State for AceEditor content
   const [selectedOption, setSelectedOption] = useState('AI'); // State for select box
   const [apiKey, setApiKey] = useState(''); // State for API key input
+  const [detectorName, setDetectorName] = useState(''); // State for Detector name input
   const [promptText, setPromptText] = useState(''); // State for Prompt text input
   const [outputText, setOutputText] = useState(''); // State for Output textarea
 
   const handleRun = () => {
-    explainCode(codeEntry, (newWord) => {
-      setOutputText((prevOutputText) => prevOutputText + newWord);
+    setOutputText("");
+    explainCode(codeEntry, promptText, (newWord) => {
+      if (!!newWord) {
+        setOutputText((prevOutputText) => prevOutputText + newWord);
+      }
     });
   };
 
@@ -55,23 +59,31 @@ function App() {
         </select>
 
         {selectedOption === 'AI' && (
-          <input
-            type="text"
-            placeholder="API Key"
-            className="promptInput"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-          />
+          <>
+            <input
+              type="text"
+              placeholder="API Key"
+              className="promptInput"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Detector Name"
+              className="promptInput"
+              value={detectorName}
+              onChange={(e) => setDetectorName(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Detector"
+              className="promptInput"
+              id="prompt"
+              value={promptText}
+              onChange={(e) => setPromptText(e.target.value)}
+            />
+          </>
         )}
-
-        <input
-          type="text"
-          placeholder="Prompt"
-          className="promptInput"
-          id="prompt"
-          value={promptText}
-          onChange={(e) => setPromptText(e.target.value)}
-        />
         
         <button className="runButton" onClick={handleRun}>Run</button>
 

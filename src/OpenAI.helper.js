@@ -6,7 +6,7 @@ const openai = new OpenAI({
 });
 const gptModel = "gpt-4";
 
-export async function explainCode(codeToExplain, callback) {
+export async function explainCode(codeToExplain, detector, callback) {
     try {
         const stream = await openai.chat.completions.create({
             frequency_penalty: 0,
@@ -17,13 +17,12 @@ export async function explainCode(codeToExplain, callback) {
                 },
                 {
                     role: "system",
-                    content: "Be concise in your response and as brief as possible."
+                    content: `Only answer with a single word "Yes" or "No", along with one relevant line of code (number).`
                 },
                 {
                     role: "user",
                     content:
-                        "Explain what the following Solidity code does, adding any relevant" +
-                        " comments about potential security flaws, if any exist:\n" +
+                        `${detector}\n` +
                         codeToExplain
                 }
             ],
