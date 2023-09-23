@@ -148,11 +148,11 @@ function App() {
             />
           </>
         )}
-        <button className="runButton" disabled={!apiKey || !promptText || !detectorName} onClick={handleRun}>Run</button>
+        <button className="runButton" disabled={!apiKey || !promptText || !detectorName || codeEntry === 'Paste your smart contract here'} onClick={handleRun}>Run</button>
         {list.length > 1 &&
-          <button className="runButton" onClick={handleRunAll}>Run All Detectors</button>
+          <button className="runButton" disabled={codeEntry === 'Paste your smart contract here'} onClick={handleRunAll}>Run All Detectors</button>
         }
-        <button className="runButton" disabled={!apiKey || !promptText || !detectorName} onClick={handleFileDownload}>Download Detector</button>
+        <button className="runButton" disabled={!apiKey || !promptText || !detectorName || codeEntry === 'Paste your smart contract here'} onClick={handleFileDownload}>Download Detector</button>
         <label className="fileUploadWrapper">Upload Detectors<input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} /></label>
 
         <textarea
