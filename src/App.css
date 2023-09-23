@@ -76,10 +76,13 @@ select {
   height: 8vh; 
 }
 
-.promptInput,
 .outputBox {
   flex-grow: 1;
   margin-top: 1vh;
+}
+
+#prompt {
+  height: 15vh;
 }
 
 .runButton {
