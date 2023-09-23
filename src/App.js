@@ -38,7 +38,9 @@ function App() {
     for (const item of list) {
       setOutputText((prevOutputText) => prevOutputText + item.name + ": ");
       const response = await explainCodeNoStream(codeEntry, item.prompt, apiKey);
-      setOutputText((prevOutputText) => prevOutputText + response.content + "\n\n");
+      setOutputText((prevOutputText) => prevOutputText + (response?.content ?? "") + "\n\n");
+
+      await new Promise(resolve => setTimeout(resolve, 10000));
     }
   }
 
