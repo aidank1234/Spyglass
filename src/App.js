@@ -14,6 +14,7 @@ function App() {
   const [detectorName, setDetectorName] = useState(''); // State for Detector name input
   const [promptText, setPromptText] = useState(''); // State for Prompt text input
   const [outputText, setOutputText] = useState(''); // State for Output textarea
+  const [list, setList] = useState([]); // State for list of JSON name-prompt entries
 
   const handleRun = () => {
     setOutputText("");
@@ -35,23 +36,33 @@ function App() {
     document.body.removeChild(link);
   };
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    if (file && file.type === 'application/json') {
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = (event) => {
         try {
-          const jsonData = JSON.parse(e.target.result);
-          const [key] = Object.keys(jsonData);
-          setDetectorName(key);
-          setPromptText(jsonData[key]);
+          const parsedObj = JSON.parse(event.target.result);
+          const parsedList = Object.entries(parsedObj).map(([name, prompt]) => ({ name, prompt }));
+          if (parsedList.length > 0) {
+            setList(parsedList);
+            setDetectorName(parsedList[0].name);
+            setPromptText(parsedList[0].prompt);
+          }
         } catch (error) {
-          alert('Invalid JSON format!');
+          console.error('Invalid JSON:', error);
         }
       };
       reader.readAsText(file);
-    } else {
-      alert('Please upload a valid JSON file!');
+    }
+  };
+
+  const handleDetectorChange = (e) => {
+    const selectedName = e.target.value;
+    const selectedEntry = list.find((entry) => entry.name === selectedName);
+    if (selectedEntry) {
+      setDetectorName(selectedEntry.name);
+      setPromptText(selectedEntry.prompt);
     }
   };
 
@@ -102,13 +113,20 @@ function App() {
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
             />
-            <input
+            {list.length > 1 ? (
+               <select onChange={handleDetectorChange} value={detectorName} className="promptInput">
+               {list.map((entry, index) => <option key={index} value={entry.name}>{entry.name}</option>)}
+             </select>
+            ) : (
+              <input
               type="text"
               placeholder="Detector Name"
               className="promptInput"
               value={detectorName}
               onChange={(e) => setDetectorName(e.target.value)}
             />
+            )}
+           
             <textarea
               type="text"
               placeholder="Detector (yes or no question)"
@@ -121,8 +139,8 @@ function App() {
         )}
         <button className="runButton" onClick={handleRun}>Run</button>
         <button className="runButton" onClick={handleFileDownload}>Download JSON</button>
-        <label className="fileUploadWrapper">Upload File<input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} /></label>
-        
+        <label className="fileUploadWrapper">Upload Detectors<input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} /></label>
+
         <textarea
           className="outputBox"
           placeholder="Output"
