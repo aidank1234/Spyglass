@@ -65,6 +65,7 @@ function App() {
           type="text"
           placeholder="Prompt"
           className="promptInput"
+          id="prompt"
           value={promptText}
           onChange={(e) => setPromptText(e.target.value)}
         />
