@@ -64,7 +64,14 @@ select,
   border-radius: 5px;
   padding: 0.5vh 1vw;
   margin-bottom: 1vh;
+}
+
+select, .promptInput {
   background-color: #e2e0d8;
+}
+
+.outputBox {
+  background-color: #b3c6e7;
 }
 
 .promptInput {
@@ -117,9 +124,7 @@ select {
   border-radius: 10px;
 }
 
-.logo {
-  width: 100px; /* Adjust the width to make it square */
-  height: 100px; /* Same height as the width to make it square */
+.logo-container {
   position: absolute; /* Position absolutely within the parent */
   top: 0; /* Place at the top */
   left: 20px; /* Place at the left */
@@ -141,4 +146,19 @@ select {
 
 .fileUploadWrapper:hover {
   background-color: #555;
+  display: flex; /* Use flex layout for the container */
+  align-items: center; /* Vertically center the logo and label */
+}
+
+.label {
+  font-weight: bold;
+  font-size: 30px;
+  color: #8ac0df;
+  margin-left: 2px;
+  margin-top: 34px;
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
 }

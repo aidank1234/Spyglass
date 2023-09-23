@@ -8,7 +8,7 @@ import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-monokai';
 
 function App() {
-  const [codeEntry, setCodeEntry] = useState(''); // State for AceEditor content
+  const [codeEntry, setCodeEntry] = useState('Paste your smart contract here'); // State for AceEditor content
   const [selectedOption, setSelectedOption] = useState('AI'); // State for select box
   const [apiKey, setApiKey] = useState(''); // State for API key input
   const [detectorName, setDetectorName] = useState(''); // State for Detector name input
@@ -68,8 +68,10 @@ function App() {
 
   return (
     <div className="mainContainer">
-       {/* Logo in the top-left corner */}
-       <img src={logo} alt="Logo" className="logo" />
+      <div className="logo-container">
+        <img src={logo} alt="Logo" className="logo" />
+        <span className="label">Spyglass</span>
+      </div>
 
       <div className='horizontalPart'>
         <AceEditor
@@ -138,7 +140,7 @@ function App() {
           </>
         )}
         <button className="runButton" onClick={handleRun}>Run</button>
-        <button className="runButton" onClick={handleFileDownload}>Download JSON</button>
+        <button className="runButton" onClick={handleFileDownload}>Download Detector</button>
         <label className="fileUploadWrapper">Upload Detectors<input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} /></label>
 
         <textarea
