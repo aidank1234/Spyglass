@@ -64,6 +64,7 @@ function App() {
             setList(parsedList);
             setDetectorName(parsedList[0].name);
             setPromptText(parsedList[0].prompt);
+            setViewMode(true);
           }
         } catch (error) {
           console.error('Invalid JSON:', error);
