@@ -128,12 +128,17 @@ function App() {
         />
       </div>
       <div className="horizontalPart">
-        {/* <select
+        <select
           value={selectedOption}
+          className="typeSelect"
           onChange={(e) => setSelectedOption(e.target.value)}
         >
           <option value="AI">AI</option>
-        </select> */}
+          <option value="regex">Regex</option>
+          <option value="AST" disabled>AST Walker</option>
+          <option value="unitTest" disabled>Foundry test</option>
+          <option value="slither" disabled>Slither detector</option>
+        </select>
 
         {selectedOption === 'AI' && (
           <>
@@ -171,6 +176,36 @@ function App() {
               onChange={(e) => setPromptText(e.target.value)}
             />
           </>
+        )}
+        {selectedOption === 'regex' && (
+            <>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: "100%" }}>
+                {viewMode ? (
+                    <select onChange={handleDetectorChange} value={detectorName} className="promptInput">
+                      {list.map((entry, index) => <option key={index} value={entry.name}>{entry.name}</option>)}
+                    </select>
+                ) : (
+                    <input
+                        type="text"
+                        placeholder="Detector Name"
+                        className="promptInput"
+                        value={detectorName}
+                        onChange={(e) => setDetectorName(e.target.value)}
+                    />
+                )}
+                <button className='newButton' disabled={!viewMode && (!detectorName || !promptText)} onClick={handleAddDetector} style={{height: "40px", width: 60, marginBottom: 8, borderRadius: '5px', border: 'none'}}>{viewMode ? 'New' : 'Save'}</button>
+              </div>
+
+              <textarea
+                  type="text"
+                  placeholder="Detector (regex pattern)"
+                  className="promptInput"
+                  id="prompt"
+                  value={promptText}
+                  disabled={viewMode}
+                  onChange={(e) => setPromptText(e.target.value)}
+              />
+            </>
         )}
         <button className="runButton" disabled={!apiKey || !promptText || !detectorName || codeEntry === 'Paste your smart contract here'} onClick={handleRun}>Run</button>
         {list.length > 1 &&
