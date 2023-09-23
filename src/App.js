@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AceEditor from 'react-ace';
+import { explainCode } from './OpenAI.helper';
 // Import necessary modes and themes for Ace Editor
 import './App.css';
 import 'ace-builds/src-noconflict/mode-javascript';
@@ -13,7 +14,9 @@ function App() {
   const [outputText, setOutputText] = useState(''); // State for Output textarea
 
   const handleRun = () => {
-    // Handle the run logic here
+    explainCode(codeEntry, (newWord) => {
+      setOutputText((prevOutputText) => prevOutputText + newWord);
+    });
   };
 
   return (
