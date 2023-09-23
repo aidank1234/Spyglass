@@ -100,13 +100,17 @@ select {
   border-radius: 5px;
   background-color: #2b374d;
   color: white;
-  cursor: pointer;
   margin-top: 1vh;
   border: none; /* Remove the default border */
 }
 
 .runButton:hover {
   background-color: #34495e;
+}
+
+.runButton:disabled {
+  background-color: #808080;
+  cursor: not-allowed;
 }
 
 .apiKeyInput {
