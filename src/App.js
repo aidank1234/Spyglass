@@ -6,6 +6,7 @@ import logo from './spyLogo.png'; // Import your logo image
 import './App.css';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-monokai';
+import {matchRegex} from "./regex.helper";
 
 function App() {
   const [codeEntry, setCodeEntry] = useState('Paste your smart contract here'); // State for AceEditor content
@@ -19,16 +20,27 @@ function App() {
 
   const handleRun = () => {
     setOutputText("");
-    explainCode(codeEntry, promptText, apiKey, (newWord) => {
-      if (!!newWord) {
-        setOutputText((prevOutputText) => prevOutputText + newWord);
-      }
-    });
+    if (selectedOption === "AI")
+      explainCode(codeEntry, promptText, apiKey, (newWord) => {
+        if (!!newWord) {
+          setOutputText((prevOutputText) => prevOutputText + newWord);
+        }
+      });
+    else if (selectedOption === "regex")
+      matchRegex(codeEntry, promptText).then(res => {
+        setOutputText((prevOutputText) => prevOutputText + res);
+      });
   };
 
   useEffect(() => {
     if (list.length) {
       setPromptText(list[0].prompt);
+      console.log(list[0]);
+      if (list[0].r) {
+        setSelectedOption("regex");
+      } else {
+        setSelectedOption("AI");
+      }
     }
   }, [list]);
 
@@ -37,8 +49,13 @@ function App() {
     setOutputText("");
     for (const item of list) {
       setOutputText((prevOutputText) => prevOutputText + item.name + ": ");
-      const response = await explainCodeNoStream(codeEntry, item.prompt, apiKey);
-      setOutputText((prevOutputText) => prevOutputText + (response?.content ?? "") + "\n\n");
+      if (item.r) {
+        const matchR = await matchRegex(codeEntry, item.prompt);
+        setOutputText((prevOutputText) => prevOutputText + matchR + "\n\n");
+      } else {
+        const response = await explainCodeNoStream(codeEntry, item.prompt, apiKey);
+        setOutputText((prevOutputText) => prevOutputText + (response?.content ?? "") + "\n\n");
+      }
     }
   }
 
@@ -86,7 +103,7 @@ function App() {
   const handleAddDetector = () => {
     if (!viewMode) {
       if (detectorName.trim() && promptText.trim()) {
-        setList([...list, { name: detectorName, prompt: promptText }]);
+        setList([...list, { name: detectorName, prompt: promptText, r: selectedOption === "AI" ? false : true }]);
         setDetectorName(''); // clear the input fields after adding
         setViewMode(true);
       }
@@ -129,51 +146,52 @@ function App() {
         />
       </div>
       <div className="horizontalPart">
-        {/* <select
+        <select
           value={selectedOption}
+          disabled={viewMode}
+          className="typeSelect"
           onChange={(e) => setSelectedOption(e.target.value)}
         >
           <option value="AI">AI</option>
-        </select> */}
-
-        {selectedOption === 'AI' && (
-          <>
+          <option value="regex">Regex</option>
+          <option value="AST" disabled>AST Walker</option>
+          <option value="unitTest" disabled>Foundry test</option>
+          <option value="slither" disabled>Slither detector</option>
+        </select>
+          {selectedOption === "AI" && <input
+            type="password"
+            placeholder="OpenAI API Key"
+            className="promptInput"
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+          /> }
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: "100%" }}>
+          {viewMode ? (
+              <select onChange={handleDetectorChange} value={detectorName} className="promptInput">
+              {list.map((entry, index) => <option key={index} value={entry.name}>{entry.name}</option>)}
+            </select>
+          ) : (
             <input
-              type="password"
-              placeholder="OpenAI API Key"
-              className="promptInput"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-            />
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: "100%" }}>
-            {viewMode ? (
-               <select onChange={handleDetectorChange} value={detectorName} className="promptInput">
-               {list.map((entry, index) => <option key={index} value={entry.name}>{entry.name}</option>)}
-             </select>
-            ) : (
-              <input
-              type="text"
-              placeholder="Detector Name"
-              className="promptInput"
-              value={detectorName}
-              onChange={(e) => setDetectorName(e.target.value)}
-            />
-            )}
-            <button className='newButton' disabled={!viewMode && (!detectorName || !promptText)} onClick={handleAddDetector} style={{height: "40px", width: 60, marginBottom: 8, borderRadius: '5px', border: 'none'}}>{viewMode ? 'New' : 'Save'}</button>
-            </div>
-           
-            <textarea
-              type="text"
-              placeholder="Detector (yes or no question)"
-              className="promptInput"
-              id="prompt"
-              value={promptText}
-              disabled={viewMode}
-              onChange={(e) => setPromptText(e.target.value)}
-            />
-          </>
-        )}
-        <button className="runButton" disabled={!apiKey || !promptText || !detectorName || codeEntry === 'Paste your smart contract here'} onClick={handleRun}>Run</button>
+            type="text"
+            placeholder="Detector Name"
+            className="promptInput"
+            value={detectorName}
+            onChange={(e) => setDetectorName(e.target.value)}
+          />
+          )}
+          <button className='newButton' disabled={!viewMode && (!detectorName || !promptText)} onClick={handleAddDetector} style={{height: "40px", width: 60, marginBottom: 8, borderRadius: '5px', border: 'none'}}>{viewMode ? 'New' : 'Save'}</button>
+          </div>
+          
+          <textarea
+            type="text"
+            placeholder={selectedOption === "AI" ? "Detector (yes or no question)" : "Detector (regex)"}
+            className="promptInput"
+            id="prompt"
+            value={promptText}
+            disabled={viewMode}
+            onChange={(e) => setPromptText(e.target.value)}
+          />
+        <button className="runButton" disabled={(!apiKey && selectedOption === "AI")|| !promptText || !detectorName || codeEntry === 'Paste your smart contract here'} onClick={handleRun}>Run</button>
         {list.length > 1 &&
           <button className="runButton" disabled={codeEntry === 'Paste your smart contract here' || !apiKey} onClick={handleRunAll}>Run All Detectors</button>
         }
