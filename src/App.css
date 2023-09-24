@@ -6,6 +6,10 @@ body, button, textarea, input {
   height: 40px;
 }
 
+.typeSelect {
+  height: 40px;
+}
+
 select,
 .promptInput,
 .outputBox,
